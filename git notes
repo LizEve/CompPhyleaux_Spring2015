@@ -39,9 +39,19 @@ $git pull upstream master
 How to push updates from computer::
 $git push origin master
 
+if you have added a file on the computer. you must use:
+$git add /file_you_made
+$git commit -m "notes that are added for this version"
+#-m pushes to master branch (i think). and if you flag -a I think it updates all new files with same info in quotations
+$git push origin master
+
+
+
 How to set up a repo from computer::
 https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
 
 
 more git resources
  http://wiki.freegeek.org/index.php/Git_for_dummies#Setup
+
+
