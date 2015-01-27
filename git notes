@@ -39,11 +39,13 @@ $git pull upstream master
 How to push updates from computer::
 $git push origin master
 
-if you have added a file on the computer. you must use:
-$git add /file_you_made
-$git commit -m "notes that are added for this version"
-#-m pushes to master branch (i think). and if you flag -a I think it updates all new files with same info in quotations
-$git push origin master
+if you have added a file on the computer. there might be an easier way to do all of this:
+  $git add /file_you_made
+  $git commit -m "notes that are added for this version"
+  -m pushes to master branch (i think).  
+  -a adds all new files with same info in quotations. if you only add info to one file you can flag this instead of doing the add command
+  $git push origin master
+
 
 
 
