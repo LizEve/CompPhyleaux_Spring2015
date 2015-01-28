@@ -94,19 +94,51 @@ def arb_disc_dist(events,probs):
     print "the probability of you eating a",event,"is",prob
  
 events1=["magnet", "water bottle", "headphones", "sofa", "thermostat", "floor"]
-probs1=[0.2,0.3,0.5,0.6,0.1,0.4]
+
 
 arb_disc_dist(events1,probs1)
 
 
-
+"""
 ---> Sampling sites from an alignment <---
 
 Imagine that you have a multiple sequence alignment with two kinds of sites. One type of site pattern supports the monophyly of taxon A and taxon B. The second type supports the monophyly of taxon A and taxon C.
 
 (6) For an alignment of 400 sites, with 200 sites of type 1 and 200 of type 2, sample a new alignment (a new set of site pattern counts) with replacement from the original using your function from (5). Print out the counts of the two types.
+"""
+
+import random
+#n represents the number of sites
+def sampling_seq(n):
+    new_seq=[]
+    for bp in range(n):
+        x=random.random()
+        if x <= 0.5:
+            new_seq.append(1)
+        else:
+            new_seq.append(2)
+    type1=new_seq.count(1)
+    type2=new_seq.count(2)
+    print "there are",type1,"sites of type 1 and ",type2,"sites of type 2"
+    result=(type1, type2)
+    #this is a tuple, but could be a list. doesn't matter. just want to be able to pull both numbers out of results 
+    return result
+
+sampling_seq(400)
+            
+
 
 (7) Repeat (6) 100 times and store the results in a list.
+#t is number of trials/repeats
+#n is number of sites within one trial
+def repeat(t,n):
+	results=[]
+	for num in range(t):
+		x=sampling_seq(n)
+		type1=x[0]
+		type2=x[1]
+		trial=(type1,type2)
+
 
 (8) Of those 100 trials, summarize how often you saw particular proportions of type 1 vs. type 2. 
 

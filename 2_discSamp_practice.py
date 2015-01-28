@@ -50,4 +50,48 @@ def binom_dist(k,n,p):
     
 binom_dist(2,4,0.1)
 
-    
+import random
+
+
+
+def arb_disc_dist(events,probs):
+    #zip together the two lists into a tuple
+    event_probs=zip(events,probs)
+    #randomly select a tuple. event and prob tuple. later we will parse out the event name and the probability
+    evprobtupe=random.choice(event_probs)
+    event=evprobtupe[0]
+    prob=evprobtupe[1]
+    #print event
+    #print prob
+    print "the probability of you eating a",event,"is",prob
+ 
+events1=["magnet", "water bottle", "headphones", "sofa", "thermostat", "floor"]
+probs1=[0.2,0.3,0.5,0.6,0.1,0.4]
+
+arb_disc_dist(events1,probs1)
+
+import random
+#n represents the number of sites
+def sampling_seq(n):
+    new_seq=[]
+    for bp in range(n):
+        x=random.random()
+        if x <= 0.5:
+            new_seq.append(1)
+        else:
+            new_seq.append(2)
+    type1=new_seq.count(1)
+    type2=new_seq.count(2)
+    print "there are",type1,"sites of type 1 and ",type2,"sites of type 2"
+    result=(type1, type2)
+    print result[0]
+
+sampling_seq(400)
+
+def repeat(t,n):
+	results=[]
+	for num in range(t):
+		x=sampling_seq(n)
+		type1=x[0]
+		type2=x[1]
+		trial=(type1,type2)

@@ -29,6 +29,11 @@ $git clone git@github.com:LizEve/CompPhyleaux_Spring2015.git
  
  
 How to keep a forked repo up to date::
+#add your fork
+$git clone git@github.com:LizEve/reading_group.git
+#then tell it to update from OG fork
+$git remote add upstream git@github.com:mgharvey/reading_group.git
+#then to update do this…
 $git pull upstream master 
  https://gist.github.com/CristinaSolana/1885435
  
