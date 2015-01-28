@@ -70,6 +70,7 @@ probs1=[0.2,0.3,0.5,0.6,0.1,0.4]
 
 arb_disc_dist(events1,probs1)
 
+from __future__ import division
 import random
 #n represents the number of sites
 def sampling_seq(n):
@@ -82,16 +83,79 @@ def sampling_seq(n):
             new_seq.append(2)
     type1=new_seq.count(1)
     type2=new_seq.count(2)
-    print "there are",type1,"sites of type 1 and ",type2,"sites of type 2"
+    #print "there are",type1,"sites of type 1 and ",type2,"sites of type 2"
     result=(type1, type2)
-    print result[0]
+    return result
 
 sampling_seq(400)
-
+#t is number of trials/repeats
+#n is the number of sites in one trial
 def repeat(t,n):
-	results=[]
-	for num in range(t):
-		x=sampling_seq(n)
-		type1=x[0]
-		type2=x[1]
-		trial=(type1,type2)
+    results=[]
+    #make a list to fill with trial results
+    for num in range(t):
+        x=sampling_seq(n)
+        #this will return a tuple of number of sites with type 1, type two
+        type1=x[0]
+        type2=x[1]
+        #calculate the percent of each type of site divided by total
+        frac_type1=type1/n
+        frac_type2=type2/n
+        trial=(type1,type2, frac_type1, frac_type2)
+        results.append(trial)
+    return results
+    
+
+import matplotlib.pyplot as plt
+#wrapping in a fuction that takes t-number of trials. n-number of sites. site_type- which site you want to make a histogram of. and 
+def make_graph(t,n,site_type,bin_num):
+    if site_type == "type1":
+        z=2
+    elif site_type == "type2":
+        z=3
+    else:
+        print "not a valid site type, please enter type1 or type2"
+    #run t times with n bp per sequence
+    run=repeat(t,n)
+    #making a list of just probabilities of whatever type you input
+    type_list=[x[z] for x in run]
+    #return type_list
+    #plotting said list in histogram
+    plt.hist(type_list, bins = bin_num)
+    plt.ylabel('number of trials')
+    plt.xlabel('number of sites with choosen type in sequence')
+    plt.show()
+
+make_graph(100,400,"type1",20)
+
+
+
+prob_type=[]
+run=repeat(100,400)
+print run
+prob_type=[x[2] for x in run]
+print prob_type
+    
+
+def make_PMF(t,n,site_type,p,bin_num):
+    if site_type == "type1":
+        z=0
+    elif site_type == "type2":
+        z=1
+    else:
+        print "not a valid site type, please enter type1 or type2"
+    #run t times with n bp per sequence
+    run=repeat(t,n)
+    type_list=[x[z] for x in run]
+    PMF_type1=[]
+    for num in type_list:
+        bd=binom_dist(num,n,p)
+        PMF_type1.append(bd)
+    plt.hist(type_list, bins = bin_num)
+    plt.ylabel('number of trials')
+    plt.xlabel('PMF value')
+    plt.show()
+
+make_PMF(10000,400,"type1",0.5,20)
+make_graph(10000,400,"type1",20)
+

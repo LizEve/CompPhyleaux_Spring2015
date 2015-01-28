@@ -10,6 +10,8 @@ import random
 
 from __future__ import division
 
+import matplotlib.pyplot as plt
+
 def multip_range(max,min):
     total = 1 #set total to 1, not zero
     if min <= 0 or max <=0: #make sure your range doesnt equal zero
@@ -34,6 +36,8 @@ def binom_coeff(n,k):
     return binom 
 
 #b using the equation = (n*(n-1)*(n-2)...(n-k+1))/k!
+#n is total number of trials
+#k is number of successes
 def fast_binom_coeff(n,k):
     k1=multip_range(k,1)
     max=n
@@ -128,7 +132,9 @@ sampling_seq(400)
             
 
 
+"""
 (7) Repeat (6) 100 times and store the results in a list.
+"""
 #t is number of trials/repeats
 #n is number of sites within one trial
 def repeat(t,n):
@@ -139,19 +145,80 @@ def repeat(t,n):
 		type2=x[1]
 		trial=(type1,type2)
 
-
+"""
 (8) Of those 100 trials, summarize how often you saw particular proportions of type 1 vs. type 2. 
+"""
+#wrapping in a fuction that takes 
+#t-number of trials. 
+#n-number of sites. 
+#site_type- which site you want to make a histogram of. type1 or type2
+#bin_num- number of bins in your histogram
+
+def make_graph(t,n,site_type,bin_num):
+    if site_type == "type1":
+        z=2
+    elif site_type == "type2":
+        z=3
+    else:
+        print "not a valid site type, please enter type1 or type2"
+    #run t times with n bp per sequence
+    run=repeat(t,n)
+    #making a list of whatever type you input
+    type_list=[x[z] for x in run]
+    #return type_list
+    #plotting said list in histogram
+    plt.hist(type_list, bins = bin_num)
+    plt.ylabel('number of trials')
+    plt.xlabel('number of bp of choosen type in sequence')
+    plt.show()
+
+make_graph(100,400,"type1",20)
+make_graph(100,400,"type2",20)
+
+#would like to make both graphs at once but my graphing skills in python need a lot of work
+
 
 (9) Calculate the probabilities of the proportions you saw in (8) using the binomial probability mass function (PMF) from (4).
 
+#wrapping in a fuction that takes 
+#t-number of trials. 
+#n-number of sites. 
+#p-probability of your site type
+#site_type- which site you want to make a histogram of. type1 or type2
+#bin_num- number of bins in your histogram
+def make_PMF(t,n,site_type,p,bin_num):
+    if site_type == "type1":
+        z=0
+    elif site_type == "type2":
+        z=1
+    else:
+        print "not a valid site type, please enter type1 or type2"
+    #run t times with n bp per sequence
+    run=repeat(t,n)
+    type_list=[x[z] for x in run]
+    PMF_type1=[]
+    for num in type_list:
+        bd=binom_dist(num,n,p)
+        PMF_type1.append(bd)
+    plt.hist(type_list, bins = bin_num)
+    plt.ylabel('number of trials')
+    plt.xlabel('PMF value')
+    plt.show()
+
+
+
 (10) Compare your results from (8) and (9).
+
+make_PMF(10000,400,"type1",0.5,20)
+make_graph(10000,400,"type1",20)
+
+
 
 (11) Repeat 7-10, but use 10,000 trials.
 
 
 
-
-
+they look about the same to me
 
 
 
