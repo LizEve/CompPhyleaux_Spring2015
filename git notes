@@ -52,6 +52,17 @@ if you have added a file on the computer. there might be an easier way to do all
 How to set up a repo from computer::
 https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
 
+This is what i did. might not be most elegant. MAKE FILE ON GITHUB WEBSITE FIRST. could not figure how to push a new file from local machine to remote repo. no idea. 
+
+#navigate into local folder you want to push to your remote repository
+$ git init
+$ git add .
+$ git commit -a -m 'first commit'
+$ git remote add 'git@github.com:LizEve/PopGen_Fall2014.git'
+$ git remote add origin 'git@github.com:LizEve/PopGen_Fall2014.git'
+$ git remote -v
+
+
 
 more git resources
  http://wiki.freegeek.org/index.php/Git_for_dummies#Setup
