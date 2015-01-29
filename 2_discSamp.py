@@ -11,7 +11,7 @@ import random
 from __future__ import division
 
 import matplotlib.pyplot as plt
-
+#basically a factorial calculation between two numbers
 def multip_range(max,min):
     total = 1 #set total to 1, not zero
     if min <= 0 or max <=0: #make sure your range doesnt equal zero
@@ -30,14 +30,16 @@ def binom_coeff(n,k):
     #assigning each variable for clarity
     nk=(n-k) 
     n1=multip_range(n,1)
+    #there is also a factorial function that you could use here. 
     k1=multip_range(k,1)
     #bionom_coeff equation
     binom = n1/(nk*k1)
     return binom 
 
-#b using the equation = (n*(n-1)*(n-2)...(n-k+1))/k!
+#using the equation = (n*(n-1)*(n-2)...(n-k+1))/k!
 #n is total number of trials
 #k is number of successes
+#this function cancles out a lot of factorials. 
 def fast_binom_coeff(n,k):
     k1=multip_range(k,1)
     max=n
