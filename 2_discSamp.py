@@ -88,8 +88,8 @@ numpy.random.binomial(n, p, k)
 (5) Now write a function to sample from an arbitrary discrete distribution. This function should take two arguments. The first is a list of arbitrarily labeled events and the second is a list of probabilities associated with these events. Obviously, these two lists should be the same length.
 """
 #events- a list of random events
-#probs- the probability for each event
-
+#probs- the probability for each event. must add up to zero
+#this pulls events randomly, with no basis on it's probabilities
 def arb_disc_dist(events,probs):
     #zip together the two lists into a tuple
     event_probs=zip(events,probs)
@@ -106,6 +106,23 @@ events1=["magnet", "water bottle", "headphones", "sofa", "thermostat", "floor"]
 
 arb_disc_dist(events1,probs1)
 
+#Jeremy's code
+def discSamp(events, probs):
+	#pick random number
+	ranNum = scipy.random.random()
+	#open an empty list
+	cumulProbs=[]
+	#start by adding the first element
+	cumulProbs.extend([probs[0]])
+	#for elements in the range of your list after the first one[0]
+	for i in range(1,leng(probs)):
+		#add the probability of i plus the probability of the previous one in the list you are making cumulProbs
+		cumulProbs.extend([probs[i]+cumulProbs[-1]])
+	#now for all numbers in a lenght
+	for i in range(0,len(probs)):
+		if ranNum < cumulProbs[i]:
+			return events[i]
+	return None
 
 """
 ---> Sampling sites from an alignment <---
@@ -114,11 +131,14 @@ Imagine that you have a multiple sequence alignment with two kinds of sites. One
 
 (6) For an alignment of 400 sites, with 200 sites of type 1 and 200 of type 2, sample a new alignment (a new set of site pattern counts) with replacement from the original using your function from (5). Print out the counts of the two types.
 """
+#bootstrapping
 
 import random
 #n represents the number of sites
 def sampling_seq(n):
+	#open list
     new_seq=[]
+    #for the number of bp in the sequence, pick a random number. if its <0.5 append #1 to list, else append #2
     for bp in range(n):
         x=random.random()
         if x <= 0.5:
@@ -140,14 +160,21 @@ sampling_seq(400)
 (7) Repeat (6) 100 times and store the results in a list.
 """
 #t is number of trials/repeats
-#n is number of sites within one trial
+#n is the number of sites in one trial
 def repeat(t,n):
-	results=[]
-	for num in range(t):
-		x=sampling_seq(n)
-		type1=x[0]
-		type2=x[1]
-		trial=(type1,type2)
+    results=[]
+    #make a list to fill with trial results
+    for num in range(t):
+        x=sampling_seq(n)
+        #this will return a tuple of number of sites with type 1, type two
+        type1=x[0]
+        type2=x[1]
+        #calculate the percent of each type of site divided by total
+        frac_type1=type1/n
+        frac_type2=type2/n
+        trial=(type1,type2, frac_type1, frac_type2)
+        results.append(trial)
+    return results
 
 """
 (8) Of those 100 trials, summarize how often you saw particular proportions of type 1 vs. type 2. 
@@ -181,8 +208,9 @@ make_graph(100,400,"type2",20)
 
 #would like to make both graphs at once but my graphing skills in python need a lot of work
 
-
+"""
 (9) Calculate the probabilities of the proportions you saw in (8) using the binomial probability mass function (PMF) from (4).
+"""
 
 #wrapping in a fuction that takes 
 #t-number of trials. 
@@ -219,12 +247,6 @@ make_graph(10000,400,"type1",20)
 
 
 (11) Repeat 7-10, but use 10,000 trials.
-
-
-
-they look about the same to me
-
-
 
 
 
