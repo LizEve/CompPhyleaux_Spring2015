@@ -87,6 +87,8 @@ numpy.random.binomial(n, p, k)
 """
 (5) Now write a function to sample from an arbitrary discrete distribution. This function should take two arguments. The first is a list of arbitrarily labeled events and the second is a list of probabilities associated with these events. Obviously, these two lists should be the same length.
 """
+#events- a list of random events
+#probs- the probability for each event
 
 def arb_disc_dist(events,probs):
     #zip together the two lists into a tuple
