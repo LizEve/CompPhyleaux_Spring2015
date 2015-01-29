@@ -73,7 +73,7 @@ binom_coeff(1000000,2)
 """
 (4) Use either function (2a) or (2b) to write a function that calculates the probability of k successes in n Bernoulli trials with probability p. This is called the Binomial(n,p) distribution. See Theorem 3.3.5 for the necessary equation. [Hint: pow(x,y) returns x^y (x raised to the power of y).]
 """
-
+#binomial PMF
 def binom_dist(k,n,p):
     #assign variable to binom coeff 
     a=fast_binom_coeff(n,k)    
