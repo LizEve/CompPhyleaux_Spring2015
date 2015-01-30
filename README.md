@@ -5,7 +5,7 @@ A repository for the [Computational Phylogenetics Spring 2015](https://github.co
 
 Homework
 -----------
->labeled with numbers
+>See files labeled with numbers. 
 
 
 
