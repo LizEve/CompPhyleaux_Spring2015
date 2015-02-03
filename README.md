@@ -1,3 +1,12 @@
-# Computational Phyleauxgenetics Spring 2015
-# Homework assignments are numbered
-# other files contain useful functions and notes
+Computational Phyleauxgenetics 2015
+=======
+
+A repository for the [Computational Phylogenetics Spring 2015](https://github.com/jembrown/CompPhylo_Spr2015) course with [Jeremy Brown](https://github.com/jembrown) at Louisiana State University. 
+
+Homework
+-----------
+>See files labeled with numbers. 
+
+
+
+
