@@ -197,60 +197,100 @@ LRT(LHk5,pvals)
 
 
 
-#re-running with k=3
+#re-running with k=4
 
-LHk3=LH_for_pval_list(0,1,0.05,5,3)
-print LHk3
-#[0.0, 0.00113, 0.0081, 0.02438, 0.0512, 0.08789, 0.1323, 0.18115, 0.2304, 0.27565, 0.3125, 0.33691, 0.3456, 0.33642, 0.3087, 0.26367, 0.2048, 0.13818, 0.0729, 0.02143, 0.0]
+LHk4=LH_for_pval_list(0,1,0.05,5,4)
+print LHk4
+#[0.0, 3e-05, 0.00045, 0.00215, 0.0064, 0.01465, 0.02835, 0.04877, 0.0768, 0.11277, 0.15625, 0.20589, 0.2592, 0.31239, 0.36015, 0.39551, 0.4096, 0.3915, 0.32805, 0.20363, 0.0]
 
-max_LH=max(LHk3)
+max_LH=max(LHk4)
 print max_LH
-#0.3456
+#0.4096
 
 #for p of 0 =0.0
-print LHk3[0]
+print LHk4[0]
 #for p of 1 = 0.0
-print LHk3[(len(pvals)-1)]
+print LHk4[(len(pvals)-1)]
 
-simple_dot_plot(pvals, LHk3,"possible p values","Likelihood","Likelihood values")
+simple_dot_plot(pvals, LHk4,"possible p values","Likelihood","Likelihood values")
 
-LRT(LHk3,pvals)
-#[0.0, 0.00327, 0.02344, 0.07054, 0.14815, 0.25431, 0.38281, 0.52416, 0.66667, 0.7976, 0.90422, 0.97486, 1.0, 0.97344, 0.89323, 0.76293, 0.59259, 0.39983, 0.21094, 0.06201, 0.0]
+LRTk4=LRT(LHk4,pvals)
+#[0.0, 7e-05, 0.0011, 0.00525, 0.01563, 0.03577, 0.06921, 0.11907, 0.1875, 0.27532, 0.38147, 0.50266, 0.63281, 0.76267, 0.87927, 0.9656, 1.0, 0.95581, 0.8009, 0.49714, 0.0]
 
+
+index=LRTk4.index(max(LRTk4))
+print index
+max_p=pvals[index]
+print max_p
+#0.8
+
+#My interval:
+
+pval_interval=LRTk4[(index-1):(index+2)]
+print pval_interval
+#[0.75, 0.8, 0.85]
+
+LRT_interval=LRTk4[(index-1):(index+2)]
+print LRT_interval
+#[0.9656, 1.0, 0.95581]
+
+
+"""
+m = max(a)
+>>> [i for i, j in enumerate(a) if j == m]
+"""
 
 """
 Now let's try this all again, but with more data. This time, we'll use 20 draws from our cup of marbles.
 """
 
-data = k # Supply observed number of successes here.
+data = 12# Supply observed number of successes here.
 numTrials = 20
 
 
 # Calculate the likelihood scores for these values of p, in light of the data you've collected
 
 #LH_for_pval_list(pvals_min=0,pvals_max=1,counter=0.05,n=5,k=5)
-LHk15n20=LH_for_pval_list(0,1,0.05,20,15)
-print LHk15n20
-#[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4e-05, 0.00026, 0.00129, 0.0049, 0.01479, 0.03647, 0.07465, 0.1272, 0.17886, 0.20233, 0.17456, 0.10285, 0.03192, 0.00224, 0.0]
+LHk12n20=LH_for_pval_list(0,1,0.05,20,12)
+print LHk12n20
+#[0.0, 0.0, 0.0, 0.0, 9e-05, 0.00075, 0.00386, 0.01356, 0.0355, 0.07273, 0.12013, 0.1623, 0.17971, 0.16135, 0.1144, 0.06089, 0.02216, 0.00459, 0.00036, 0.0, 0.0]
 
 # Find the maximum likelihood value of p (at least, the max in this set)
 
-max_LH=max(LHk15n20)
+max_LH=max(LHk12n20)
 print max_LH
-#0.20233
+#0.17971
+
+index=LHk12n20.index(max(LHk12n20))
+print index
+max_p=pvals[index]
+print max_p
+#0.6
+
 
 # What is the strength of evidence against the most extreme values of p (0 and 1)?
 
 #for p of 0 =0.0
-print LHk15n20[0]
+print LHk12n20[0]
 #for p of 1 = 0.0
-print LHk15n20[(len(pvals)-1)]
+print LHk12n20[(len(pvals)-1)]
 
 # Calculate the likelihood ratios comparing each value (in the numerator) to the max value (in the denominator)
 
-LRTk15n20=LRT(LHk15n20,pvals)
-print LRTk15n20
-#[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0002, 0.00129, 0.00638, 0.02422, 0.0731, 0.18025, 0.36895, 0.62868, 0.884, 1.0, 0.86275, 0.50833, 0.15776, 0.01107, 0.0]
+LRTk12n20=LRT(LHk12n20,pvals)
+print LRTk12n20
+#[0.0, 0.0, 0.0, 0.0, 0.0005, 0.00417, 0.02148, 0.07545, 0.19754, 0.40471, 0.66847, 0.90312, 1.0, 0.89784, 0.63658, 0.33882, 0.12331, 0.02554, 0.002, 0.0, 0.0]
+
+index=LRTk12n20.index(max(LRTk12n20))
+print index
+
+p_interval=pvals[(index-1):(index+2)]
+print p_interval
+#[0.55, 0.6, 0.65]
+
+LRT_interval=LRTk12n20[(index-1):(index+2)]
+print LRT_interval
+#[0.90312, 1.0, 0.89784]
 
 # When is the ratio small enough to reject some values of p?
 good question!!

@@ -4,10 +4,9 @@ Likelihood
 
 stripped down to functions and hastags
 """
-
-from scipy.stats import binom
 from __future__ import division
-import random
+#from scipy.stats import binom
+#import random
 import matplotlib.pyplot as plt
 
 #basically a factorial calculation between two numbers
@@ -95,3 +94,13 @@ def LRT(LH,pvals):
         LRT_list.append(round(LRT,5))
     return LRT_list
     
+#Handy intervals that need to be wrapped in a function
+
+index=LRT_list.index(max(LRT_list))
+print index
+p_interval=pvals[(index-1):(index+2)]
+print p_interval
+LRT_interval=LRT_list[(index-1):(index+2)]
+print LRT_interval
+
+
