@@ -97,10 +97,23 @@ trueP = 0.5
 # binom.rvs(n,p) will then produce a draw from the corresponding binomial.
 
 
+real_p=.5
+n=200
+k=n*real_p
 
-# Now find ML parameter estimates for each of these trials
 
-
+def TrueP(n=200,real_p=0.5,diff=0.1,cut_off=0.001): 
+    ML_list=[]
+    for x in range(1000):
+        #pick a k value according to n and true p
+        k=binom.rvs(n,real_p)
+        #run a hill climber to find value of p given your "data". returns a tuple [LH,pval]
+        ML=ML_robot(k,n,diff,cut_off)
+        #append to a list
+        append.ML_list(ML)
+        maxvals=max(LH_list)
+        return maxvals
+        
 
 # Calculate likelihood ratios comparing L(trueP) in the numerator to the maximum
 # likelihood (ML) in the denominator. Sort the results and find the value
