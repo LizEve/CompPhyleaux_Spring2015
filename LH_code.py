@@ -38,7 +38,7 @@ def fast_binom_coeff(n,k):
 def binom_dist(k,n,p):
     a=fast_binom_coeff(n,k)  #assign variable to binom coeff 
     bi_dist=a*pow(p,k)*pow((1-p),(n-k)) #eqn P(X=k)=(n choose k)(p^k)(1-p)^(n-k)
-    return bi_dist #returns a single number
+    return bi_dist #returns a single number. The LH score
 
 
 
@@ -64,7 +64,8 @@ def LH_for_pval_list(pvals_min=0,pvals_max=1,step=0.05,n=5,k=5):
         x=binom_dist(k,n,num) #input each p value into binom dist
         LH_list.append(round(x,5)) #rounding here
     return LH_list
-    
+
+   
 
 #makes graphs
 def simple_dot_plot(xnums, ynums, xlabel, ylabel, data_label):
@@ -77,13 +78,13 @@ def simple_dot_plot(xnums, ynums, xlabel, ylabel, data_label):
 ##retriving LH values from LH-list and then corresponding pvals(need to work on getting pvals part)
  
 #maximum likelihood value of p 
-max_LH=max(LH_list)
+#max_LH=max(LH_list)
 #max_pval=pvals
 
 #for p of 0 =0.0
-LH_list[0]
+#LH_list[0]
 #for p of 1 = 1.0
-LH_list[(len(pvals)-1)]
+#LH_list[(len(pvals)-1)]
 
 # LRT for each LH value, input list of LH and pvals
 def LRT(LH,pvals):
@@ -96,11 +97,11 @@ def LRT(LH,pvals):
     
 #Handy intervals that need to be wrapped in a function
 
-index=LRT_list.index(max(LRT_list))
-print index
-p_interval=pvals[(index-1):(index+2)]
-print p_interval
-LRT_interval=LRT_list[(index-1):(index+2)]
-print LRT_interval
+#index=LRT_list.index(max(LRT_list))
+#print index
+#p_interval=pvals[(index-1):(index+2)]
+#print p_interval
+#LRT_interval=LRT_list[(index-1):(index+2)]
+#print LRT_interval
 
 
