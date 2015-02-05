@@ -121,7 +121,14 @@ def TrueP(n=200,real_p=0.5,diff=0.1,cut_off=0.001):
 
 
 
-# Now, convert the likelihood ratios (LRs) to -2ln(LRs) values.
+# Now, convert the likelihood ratios (LRs) to -2ln(LRs) values. This creates a x2 distribution
+#asymptotic result. only works with a VERY LARGE dataset. 
+#also doesn't work if p is close to boundries. ie p=0 or p=1
+#now we know this will look like x2, no matter what your p value. so now we can just use any x2 value. 
+#null- fixed P value
+#testing 1 parameter- df =1
+#we use LRT in model test to pick models in jmodeltest
+
 # Find the 95th percentile of these values. Compare these values to this table:
 # https://people.richland.edu/james/lecture/m170/tbl-chi.html. In particular, look
 # at the 0.05 column. Do any of these values seem similar to the one you calculated?
