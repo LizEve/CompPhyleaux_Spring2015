@@ -20,3 +20,15 @@ x = [1, 2, 3]
 x.extend([4, 5])
 print (x)
 gives you: [1, 2, 3, 4, 5]
+
+#Recursion- check advanced python book
+#calling function from within function
+def factorial(num):
+	#set bound so that it doesn't go below 1
+	if num !=1:
+		return num*factorial(num-1)
+	elif num == 1:
+		return 1
+	else:
+		return -1
+		#return negative to show it's failed

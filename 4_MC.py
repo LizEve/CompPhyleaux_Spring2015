@@ -5,13 +5,10 @@ Discrete-time Markov chains
 """
 
 # -*- coding: utf-8 -*-
-"""
-MC Hw
 
-stripped down to functions and hastags
-"""
 from __future__ import division
 import random
+import scipy as sp   
 
 """
 In this exercise, we will explore Markov chains that have discrete state spaces
@@ -93,6 +90,7 @@ def sampling_seq(n):
 # Write your Markov chain simulator below. Record the states of your chain in 
 # a list. Draw a random state to initiate the chain.
 #input is the state matrix 
+#check RT's for reverse time and recursion example
 
 def twostateMC(state_matrix,num_steps):
     #list state space, then randomly pick a state to start with    
@@ -119,29 +117,21 @@ def twostateMC(state_matrix,num_steps):
     return state_list
     
     
-def explicit_transition_stateMC(state_matrix,num_steps):
-    #list state space, then randomly pick a state to start with    
-    states=('A', 'B')
-    init_state=random.choice(states)    
-    state_list=[]
-    for x in range(num_steps):
-        x=random.random()
-        currstate=init_state
-        if currstate =='A':
-            if x <= 0.3:
-                state_list.append('A->A')
-                currstate='A'
-            if 0.3 < x <= 1:
-                state_list.append('A->B')
-                currstate='B'
-        if currstate == 'B':
-            if x <= 0.6:
-                state_list.append('B->A')
-                currstate='A'
-            if 0.6 < x <= 1:
-                state_list.append('B->B')
-                currstate='B'
-    return state_list
+def dmcSim(n,st=('a','b'),allProbs=):
+    #goes through n-1 numbers
+    #st is list of events
+    #function disc samp, pulls from list of states (st) based on list of probs (which we create in here with probs)
+    chain = []
+    #divide 1 by number of states for all states you've given it. and assign equal probs to each
+    currstate=discSamp(st,[1.0/len(st) for x in st])
+    for step in range(1,n):
+        #re-assign probs based on curr-state
+        probs = allProbs[st.index(currstate)]
+        #one row of probs from matrix
+        currstate = discSamp(st,probs)
+        #find a current state based on the row
+        chain.extend(currstate)
+    return chain   
 
 # Run a simulation of 10 steps and print the output.
 
@@ -149,10 +139,6 @@ twostateMC(state_matrix,10)
                 
 ['B', 'A', 'B', 'A', 'B', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'B', 'B', 'B', 'A', 'B', 'B']
                 
-        
-        
-
-
 
 
 # ----> Try to finish the above lines before Tues, Feb. 10th <----
@@ -160,36 +146,73 @@ twostateMC(state_matrix,10)
 # Now try running 100 simulations of 100 steps each. How often does the chain
 # end in each state? How does this change as you change the transition matrix?
 
+tm=[[0.3,0.7],[0.4,0.6]]
+st=('a','b')
 
+endA_list=[]
+endB_list=[]
+laststatelist=[]
+for x in range(100):
+    run=dmcSim(100,st,tm)
+    laststate=run[len(run)-1]
+    laststatelist.append(laststate)
+#print laststatelist
+endA=laststatelist.count('a')
+endA_list.append(endA)
+endB=laststatelist.count('b')
+endB_list.append(endB)
+print "number of times ending in A" + str(endA_list)
+#33,35,44
+print "number of times ending in B" + str(endB_list)
+#66,65,56
 
+tm=[[0.1,0.9],[0.5,0.5]]
+A= 37, 25, 29, 34
+B= 62, 75, 71, 66
 
 # Try defining a state space for nucleotides: A, C, G, and T. Now define a 
 # transition matrix with equal probabilities of change between states.
 
+eq_nuc_mat=[[0.25,0.25,0.25,0.25],[0.25,0.25,0.25,0.25],[0.25,0.25,0.25,0.25],[0.25,0.25,0.25,0.25]]
+bp_st=('a','c','g','t')
 
-
+         
+laststatelist=[]
+for x in range(100):
+    run=dmcSim(100,bp_st,eq_nuc_mat)
+    laststate=run[len(run)-1]
+    laststatelist.append(laststate)
+print laststatelist
+endA=laststatelist.count('a')
+print endA
+endC=laststatelist.count('c')
+print endC   
+endT=laststatelist.count('t')
+print endT
+endG=laststatelist.count('g')
+print endG       
+         
+         
+  
          
 # Again, run 100 simulations of 100 steps and look at the ending states. Then
 # try changing the transition matrix.
-         
+        
 
 
-
-
-# ----> Try to finish the above lines before Tues, Feb. 10th <----
-
-# Now try running 100 simulations of 100 steps each. How often does the chain
-# end in each state? How does this change as you change the transition matrix?
-
-
-
-
-# Try defining a state space for nucleotides: A, C, G, and T. Now define a 
-# transition matrix with equal probabilities of change between states.
-
-
-
-         
-# Again, run 100 simulations of 100 steps and look at the ending states. Then
-# try changing the transition matrix.
-         
+uneq_nuc_mat=[[0.1,0.2,0.3,0.4],[0.4,0.3,0.2,0.1],[0.1,0.2,0.3,0.4],[0.4,0.3,0.2,0.1]]
+     
+laststatelist=[]
+for x in range(100):
+    run=dmcSim(100,bp_st,uneq_nuc_mat)
+    laststate=run[len(run)-1]
+    laststatelist.append(laststate)
+print laststatelist
+endA=laststatelist.count('a')
+print endA
+endC=laststatelist.count('c')
+print endC   
+endT=laststatelist.count('t')
+print endT
+endG=laststatelist.count('g')
+print endG    
