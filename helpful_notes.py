@@ -32,3 +32,7 @@ def factorial(num):
 	else:
 		return -1
 		#return negative to show it's failed
+
+#importing things
+import numpy as np 
+#now every time you call numpy you can just use np instead. so instead of numpy.matrix you can write np.matrix

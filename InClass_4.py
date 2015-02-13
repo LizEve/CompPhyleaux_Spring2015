@@ -11,6 +11,7 @@ In-Class Markov Chain Exercise
 from __future__ import division
 import random
 import scipy as sp   
+import numpy as np
 """
 Recall from your reading that any irreducible and aperiodic Markov chain has a 
 stationary distribution. To convince ourselves that things will converge for 
@@ -67,17 +68,19 @@ def dmcSim(n,st=('a','b'),allProbs=[[0.5,0.5],[0.5,0.5]]):
 # equal. Also, don't use any 0s or 1s (to make sure the chain is irreducible
 # and aperiodic).
 
-tm=[[0.3,0.7],[0.4,0.6]]
+tm=[[0.7,0.3],[0.4,0.6]]
 st=('a','b')
 
 # Simulate a single chain for three time steps and print the states
 
 dmcSim(3,st,tm)
+['b', 'b', 'b']
 
 # Analytically calculate the progression of states for this chain.
 # Calculate the probability of observing the state in step 3, given the initial
 # state in step 1 (i.e., as if you didn't know the state in step 2).
 
+"""
 P(x1=state1, x2=state2, x3=state3)
 A= x1
 B=[x2,x3]
@@ -86,31 +89,36 @@ P(A)*P(B|A)
 P(x1)*P(x2,x3|x1)
 P(x1)*P(x2|x1)*P(x3|x2,x1) = give 1st state, prob of state 2 on 1, and state 2 on three
 P(x1)*P(x2|x1)*P(x3|x2) -> cannot have prob of x3 on x1 because of markov
+"""
 
-P(b,b,b)= 0.5*0.6*0.6 = 0.18
+P(b,b,b)= 0.5*0.6*0.6 == 0.18
 #first one is 0.5 because of uniform distribution
 #what if we don't know middle step
-P(b,?,b)=0.5*0.4*0.6+0.5*0.6*0.6= 0.12+0.18 = 0.3
+P(b,?,b)=(0.5*0.4*0.3)+(0.5*0.6*0.6)== 0.06+0.18 = 0.24
         =P(b,a,b)+P(b,b,b)
-
-P(A|B, n=3)= P(A) sum(x=states) P(B|X)
 
 #take transition matrix to the n power, it will give you the probabilities
 #matrix mulitplication
 T^n
+T=np.array(tm)
+
 
 # Now think of the chain progressing in the opposite direction. What is the
 # probability of the progression through all 3 states in this direction? How
 # does this compare to the original direction?
 #this ends up being the same because I started and ended on the same thing. let's see what happens if I start on A and end on B
 P(x3)*P(x2|x3)*P(x1|x2)
-P(b,?,b)=0.5*0.4*0.6+0.5*0.6*0.6= 0.12+0.18 = 0.3
+P(b,?,b)=(0.5*0.4*0.3)+(0.5*0.6*0.6)= 0.06+0.18 = 0.24
 =P(b,a,b)+P(b,b,b)
 
 #FORWARD- start on A, end on B
-P(a,?,b)=0.5*0.3*0.6+0.5*0.6*0.6= 0.12+0.18 = 0.3
+P(a,?,b)=(0.5*0.7*0.3)+(0.5*0.6*0.6)= 0.105+0.18 = 0.285
         =P(a,a,b)+P(a,b,b)
+#REVERSE
+P(b,?,a)=(0.5*0.4*0.7)+(0.5*0.6*0.4)= 0.139+0.12 = 0.26
+        =P(b,a,a)+P(b,b,a)
 
+#these end up being different 
 
 
 # Try the same "forward" and "reverse" calculations as above, but with this
@@ -119,8 +127,24 @@ P(a,?,b)=0.5*0.3*0.6+0.5*0.6*0.6= 0.12+0.18 = 0.3
 #           [0.39,0.61]]
 # and these starting frequencies for "a" and "b"
 # freq(a) = 0.63   freq(b) = 0.37
-
-
+revMat = [[0.77,0.23],[0.39,0.61]]
+tm=np.matrix(revMat)
+freqa=0.63
+freqb=0.37
+draw=random.random()
+if draw <= 0.63:
+    i=0
+elif draw >= 0.37:
+    i=1   
+print i
+def matrixmult(mx,i,j,n):
+    mx=np.matrix(mx)
+    Tn=mx**n
+    prob=(Tn[i,j])
+    print "matrix is "+str(Tn)
+    return "prob of i -> j is "+str(prob)
+    
+matrixmult(revMat,i,1,200)
 
 
 # What is (roughly) true about these probabilities?
