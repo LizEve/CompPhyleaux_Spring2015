@@ -1,68 +1,23 @@
-Tried installing git again and it keeps going to /usr/bin/git instead of usr/local/bin/git hopefully this wont cause problems.
-GGMount:~ ChatNoir$ which git
-/usr/bin/git
 
-SSH keys  https://help.github.com/articles/generating-ssh-keys/
-
-GGMount:~ ChatNoir$ ls -al ~/.ssh
-total 40
-drwx------   7 ChatNoir  staff   238 Jan 20 11:04 .
-drwxr-xr-x+ 43 ChatNoir  staff  1462 Jan 20 21:18 ..
--rw-------   1 ChatNoir  staff  1766 Jan 20 11:04 github_rsa
--rw-r--r--   1 ChatNoir  staff   399 Jan 20 11:04 github_rsa.pub
--rw-------   1 ChatNoir  staff  1766 Nov 10 15:44 id_rsa
--rw-r--r--   1 ChatNoir  staff   420 Nov 10 15:44 id_rsa.pub
--rw-r--r--   1 ChatNoir  staff   827 Jan 20 11:04 known_hosts
-
-going to use the github key that is already there. 
-adding config file 
-http://stackoverflow.com/questions/10455974/setting-up-ssh-keys-for-gibhub
-turns out the key already there is already in use and probably got there from the GUI version of github that i downloaded. 
-
-using the id_rsa.pub for my computer. 
-
-Putting repository on computer....
-
-$git clone git@github.com:LizEve/CompPhyleaux_Spring2015.git
- 
- also adding jeremy's phylo thing. 
- 
- 
-How to keep a forked repo up to date::
-#add your fork
-$git clone git@github.com:LizEve/reading_group.git
-#then tell it to update from OG fork
-$git remote add upstream git@github.com:mgharvey/reading_group.git
-#then to update do this…
-$git pull upstream master 
- https://gist.github.com/CristinaSolana/1885435
- 
- 
+Simple commit if you have folder already git set up:
+$ git status
+#tells you what has been edited and what hasn’t been added yet
+$ git add “filename”
+#if you need to add a filename do this, if you are okay with updating everything that you have changed at once do…
+$ git commit -a
+#this will open a vim file
+#go to a hashtag and type any letter. delete the hashtag and write your commit message in “”
+#press esc key. then type :wq 
+#this will save your file and quit vim. 
+#push your files!
+$ git push
  
 
 
-How to push updates from computer(this is still giving me problems, don't rely on this info)::
-this is how to update whatever files you've changed, not sure how to add different notes to each one. 
-$git commit -am "notes"
-$git push
-
-#this one is to set up where to send it. i think. 
-$git push origin master
-
-if you have added a file on the computer. there might be an easier way to do all of this:
-  $git add /file_you_made
-  $git commit -m "notes that are added for this version"
-  -m pushes to master branch (i think).  
-  -a adds all new files with same info in quotations. if you only add info to one file you can flag this instead of doing the add command
-  $git push origin master
 
 
-
-
-How to set up a repo from computer::
+How to set up a repo from computer (you must make the directory on github first, there is no way to push a new directory onto github)
 https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
-
-This is what i did. might not be most elegant. MAKE FILE ON GITHUB WEBSITE FIRST. could not figure how to push a new file from local machine to remote repo. no idea. 
 
 #navigate into local folder you want to push to your remote repository
 $ git init
@@ -73,8 +28,7 @@ $ git remote add origin 'git@github.com:LizEve/PopGen_Fall2014.git'
 $ git remote -v
 
 
+Websites:
 
-more git resources
- http://wiki.freegeek.org/index.php/Git_for_dummies#Setup
-
-
+https://gist.github.com/CristinaSolana/1885435
+ 
