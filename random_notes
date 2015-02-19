@@ -1,0 +1,52 @@
+# We can concatenate strings with a '+' if they are both strings
+print(myString + "_I_love_Python!")
+
+# However, operators often don't know how to mix data types
+print(myString+3)
+
+# We can fix this by making them the same data type on the fly - typecasting
+print(myString+str(3))
+
+
+GitHub- setup
+
+-http://burnedpixel.com/blog/beginners-setup-guide-for-ruby-node-git-github-on-your-mac/
+
+-installing homebrew 
+	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+-manually un-installed git because it was installed in usr/bin instead of usr/local
+-installing version 2.2.1 
+-looked up https vs ssh. seems like ssh is more secure but not nessecary for my uses (https://help.github.com/articles/which-remote-url-should-i-use/)
+
+
+#notes on command line
+	any path that starts with / is an absolute path 
+	others are called relative paths
+	./ means relative path as . means folder you are currently in
+
+#python notes
+#function
+	anything that ends with () is a function. 
+	inside the () is an argument
+	passing that variable to a function
+from __future__ import division
+	#__future__ lets you grab stuff from versions ahead of the one that you are using. 
+	# this way when you divide ints then you get a float, not 0
+#Spyder
+	if you highlight the part of the code you want and then press command enter, it will execute the highlighted part
+myString - is a class
+	it has multiple types of methods, you can create instances of the class and use the methods to alter your instance of the string 
+	ex:
+		myString = "happy cats"
+		myString.capitalize()
+			"Happy cats"
+	you can also reassign instaces of the class 
+	ex:
+		myString = myString.lower()
+	you can find things
+		myString.find("cats")
+	this will return true or false
+		myString.startswith('h')
+	You can do two things at once
+		myString.upper().starswith('H')
+
