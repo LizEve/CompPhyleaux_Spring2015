@@ -15,8 +15,13 @@
 -iterate through files, run program
 	for f in squamg_*; do cd $f; Garli-2.0 -b $f.garli.conf; cd ../;done
 
+-move all files up a folder
+	for f in *.nex; do cp ./$f ../$f; done
 
+====GREP=====
 
+-pull out one line of all the files, all the folders with a string
+	grep -C 1 "Time used" squamg_*/*
 
 
 
