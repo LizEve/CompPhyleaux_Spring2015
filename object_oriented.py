@@ -65,7 +65,7 @@ and make sure that it happens every time before trying to use the objects
 """
 
 class DNARecord(object):
-#init is a built in function that lets you assign a bunch of information to the object 
+#init is a built in function (a constructor) that lets you assign a bunch of information to each instance of the class
 #
     def __init__(self, sequence, gene_name, species_name):
         self.sequence = sequence

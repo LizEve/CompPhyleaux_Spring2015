@@ -17,6 +17,18 @@
 
 -move all files up a folder
 	for f in *.nex; do cp ./$f ../$f; done
+-compare files 
+	for f in squamg_*; do cd $f; cmp --silent $old $new || echo "files are different" ; cd ../;done
+
+-rename and move files
+
+	for f in squamg_*;
+	do
+	cd $f 
+	cp 'mpi_messages.log' $f'.mpi_messages.log'
+	mv $f'.mpi_messages.log' ../log_outputs/mpi_run.2.23.15
+	cd ../
+	done
 
 ====GREP=====
 
