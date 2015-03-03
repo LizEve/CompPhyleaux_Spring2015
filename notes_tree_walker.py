@@ -24,11 +24,23 @@ qi='a'
 qiRow=q[stateSpace.index(qi)]
 l=0.75
 x=[qij/l for qij in qiRow]
-
+print x
 print qiRow
 conditionalProbs=[qij/l for qij in qiRow]
 print conditionalProbs
 
+for i in conditionalProbs:
+    if i == -1:
+         conditionalProbs[conditionalProbs.index(i)]=0
+
+print conditionalProbs
+
+
+def margProbs(branch_len):
+    marg=sp.linalg.expm(Q*branch_len)
+    return marg
+
+margProbs(5)
 
 
 def makeQarray(q):
@@ -46,17 +58,40 @@ statFreqT=statFreqmat[3,0]
 statFreq.append([statFreqA,statFreqC,statFreqG,statFreqT])
         
 def stationaryFreq(Q,longV):
+
     statFreqmat=sp.linalg.expm(Q*longV)
     statFreqA=statFreqmat[0,1]
     statFreqC=statFreqmat[1,0]
     statFreqG=statFreqmat[2,0]
     statFreqT=statFreqmat[3,0]
-    statFreq.append([statFreqA,statFreqC,statFreqG,statFreqT])
+    statFreq=[statFreqA,statFreqC,statFreqG,statFreqT]
     return statFreq       
 
 statFreq=stationaryFreq(Q,longV)
 print statFreq
 statFreq=[]
+stateHist=['t', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c']
+timeHist=[0.30128339968394346, 0.4838314807043198, 4.0934644738405375, 2.879742835201872, 0.901128743239807, 0.2756532847403307, 0.5581161157285621, 1.091560978118395]
+print stateHist[0]
+print statFreq[stateSpace.index(stateHist[0])]
+print statFreq[1]
+
+qi=stateHist.index[i]
+j=i+1
+qj=stateHist.index[j]
+
+for i in stateHist:
+    print i
+    qiRow=q[stateSpace.index(i)]
+    print qiRow
+    j=
+    j=qiRow[stateSpace.index(j)]
+    
+
+def calcHistProb(self,stateHist,timeHist):
+        totalProb=[]
+        for i in stateHist:
+            totalProb.extend(self.stationaryFreq[self.stateSpace[statHist[0]]])
   
 def discSamp(probs):
     """

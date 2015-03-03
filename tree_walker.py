@@ -25,6 +25,7 @@ class Markov(object):
         self.chain=[]
         self.waitTimes=[]
         self.simulate()
+        self.makeQarray()
         
     def makeQarray(self):
         Q=sp.array(self.q)
@@ -62,41 +63,66 @@ class Markov(object):
                return self.stateSpace[i] #state space will always be same. 
         return None     #if none of the above happens. return nothing. 
       
-    """
-    returns the negative number in the row as a positive number
-    """
-    def qii(self,row):  
+
+    def qii(self,row): 
+        """
+        returns the negative number in the row as a positive number
+        """
         for i in row:
             if i < 0:
                 return -i
                 
     def simulate(self):
-        Q=self.makeQarray()
+        #Q=self.makeQarray()
         for n in range(self.nSims):
             qi=self.discSamp(self.stationaryFreq()) #pull a starting state from the stationary frequencies
-            print qi
+            #print qi
             self.chain.extend(qi)  #add state to the markov chain
             while sum(self.waitTimes) < self.chainLen:
-                qiRow=q[self.stateSpace.index(qi)] #pull the row corresponding to state qi
-                print qiRow
+                qiRow=self.q[self.stateSpace.index(qi)] #pull the row corresponding to state qi
+                #print qiRow
                 l=self.qii(qiRow) #pull qii from row of state qi
-                print l
+                #print l
                 wait=random.expovariate(l) #pull waiting time
-                print wait
-                self.waitTimes.extend(wait) #add to list
+                #print wait
+                self.waitTimes.append(wait)
+                #print self.waitTimes#add to list
                 conditionalProbs=[qij/l for qij in qiRow] #conditional probabilities
-                for x in conditionalProbs == -1:
-                    conditionalProbs[x]=0
-                if conditionalProbs[qi] == 0: #add check here to make sure qii/qii==0
-                    qi=self.discSamp(conditionalProbs) #sample new state from qi row, create new qi
-                    self.chain.extend(qi)
-                else:
-                    print "qii value is incorrect, something is wrong"
-            if len(self.chain)==len(self.waitTimes):
-                return self.chain, self.waitTimes
-            else:
-                print "you have unequal lists for wait times and chain states"
-                    
-                
-cha1=Markov()
-print cha1       
+                for i in conditionalProbs:
+                    if i == -1:
+                        conditionalProbs[conditionalProbs.index(i)]=0
+                qi=self.discSamp(conditionalProbs) #sample new state from qi row, based on condProbs,
+                self.chain.extend(qi) # create new qii
+        return self.chain, self.waitTimes
+            
+    def margProbs(self,branch_len):
+        """
+        marginalizes over a lenght of time
+        multiple substitutions over that time are assumed
+        large values passed to this will create stationary frequencies
+        """
+        marg=sp.linalg.expm(self.Q*branch_len)
+        return marg
+        
+    def calcHistProb(self,stateHist,timeHist):
+        statFreq=self.stationaryFreq()
+        states_totalProb=[]
+        states_totalProb.extend(self.statFreq[self.stateSpace.index(stateHist[0])])
+        for i in stateHist:
+           iRow=self.q[self.stateSpace.index(i)]
+           j
+           qj=qiRow[self.stateSpace.index[qi+1]
+           
+           def calcHistProb(self, states, timevals):
+#Calculate historical probabilities from a given sequence
+product = self.statfreq[self.sequence.index(states[0])] #Probability of 1st event
+for count in range(len(timevals)-1):# Probabilities of waiting times
+product *= Functions().exppdf(self.diag[states[count]], timevals[count+1])
+for count in range(len(states)-1):# Probabilities of change of states
+product *= self.values[states[count]][self.sequence.index(states[count+1])]
+product *= 1-(Functions().exppdf(self.diag[states[-1]], self.time-sum(timevals))) #Probability of end waiting period
+return product
+            
+            
+          
+            
