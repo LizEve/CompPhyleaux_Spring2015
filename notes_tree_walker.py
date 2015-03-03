@@ -81,11 +81,12 @@ j=i+1
 qj=stateHist.index[j]
 
 for i in stateHist:
-    print i
-    qiRow=q[stateSpace.index(i)]
-    print qiRow
-    j=
-    j=qiRow[stateSpace.index(j)]
+    #print i
+    #qiRow=q[stateSpace.index(i)]
+    #print qiRow
+    j=stateHist.index(i)
+    print j
+    #j=qiRow[stateSpace.index(j)]
     
 
 def calcHistProb(self,stateHist,timeHist):

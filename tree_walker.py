@@ -114,15 +114,7 @@ class Markov(object):
            qj=qiRow[self.stateSpace.index[qi+1]
            
            def calcHistProb(self, states, timevals):
-#Calculate historical probabilities from a given sequence
-product = self.statfreq[self.sequence.index(states[0])] #Probability of 1st event
-for count in range(len(timevals)-1):# Probabilities of waiting times
-product *= Functions().exppdf(self.diag[states[count]], timevals[count+1])
-for count in range(len(states)-1):# Probabilities of change of states
-product *= self.values[states[count]][self.sequence.index(states[count+1])]
-product *= 1-(Functions().exppdf(self.diag[states[-1]], self.time-sum(timevals))) #Probability of end waiting period
-return product
-            
+
             
           
             
