@@ -16,7 +16,7 @@ class Markov(object):
     def __init__(self,q=[[-0.75,0.25,0.25,0.25],
                         [0.25,-0.75,0.25,0.25],
                         [0.25,0.25,-0.75,0.25],
-                        [0.25,0.25,0.25,-0.75]],chainLen=10,stateSpace=('a','c','g','t'),nSims=1,longV=100):
+                        [0.25,0.25,0.25,-0.75]],chainLen=10,stateSpace=['a','c','g','t'],nSims=1,longV=100):
         self.q=q #Q indicates a np.array. q is a list of lists
         self.chainLen=chainLen #total times
         self.stateSpace=stateSpace
@@ -108,13 +108,47 @@ class Markov(object):
         statFreq=self.stationaryFreq()
         states_totalProb=[]
         states_totalProb.extend(self.statFreq[self.stateSpace.index(stateHist[0])])
-        for i in stateHist:
-           iRow=self.q[self.stateSpace.index(i)]
-           j
-           qj=qiRow[self.stateSpace.index[qi+1]
+        for count in range(len(stateHist)-1):
+            i=
+           iRow=self.q[self.stateSpace.index(count)]
+           qj=qiRow[self.stateSpace.index(count+1)]
            
            def calcHistProb(self, states, timevals):
 
             
-          
+          def stateProb(self):
+""" Calculates the probabilities across all waiting
+times and nucleotide states in the chain
+"""
+if len(self.chain) == 0:
+return "chain is empty"
+if len(self.tProblist) == 0:
+return "run the tProb function, the transition probability matrix is empty"
+list = []
+# multiply all of the waiting times together, except the last value
+sum = 1
+for i in self.times[:-1]:
+sum *= i
+# not sure about this. Do I need to convert these waiting times to a probability? and how?
+list.extend(self.times[:-1])
+# multiply all of the chain transition probabilities together
+# except the first value
+for a, b in zip(self.chain, self.chain[1:]):
+curr = self.stateSpace.index(b)
+prev = self.stateSpace.index(a)
+#print curr, prev
+#val = self.tProb()[prev, curr]
+val = self.tProblist[prev, curr]
+sum *= val
+list.append(val)
+# calculates the probability of the first state in the chain
+row = self.margProb(chainLength=100)[0]
+firstProb = row[self.stateSpace.index(self.chain[0])]
+sum *= firstProb
+list.append(firstProb)
+# just need to figure out the last value (1 - cdf (t last))
+y = 1.0 - (norm.cdf(self.times[-1]))
+sum *= y
+list.append(y)
+
             

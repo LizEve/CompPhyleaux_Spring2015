@@ -13,7 +13,7 @@ import numpy as np
 
 q=[[-0.75,0.25,0.25,0.25],[0.25,-0.75,0.25,0.25],[0.25,0.25,-0.75,0.25],[0.25,0.25,0.25,-0.75]]
 chainLen=10
-stateSpace=('a','c','g','t')
+stateSpace=['a','c','g','t']
 nsims=1
 longV=100
 Q=sp.array(q)
@@ -47,7 +47,7 @@ def makeQarray(q):
     Q=sp.array(q)
     return Q
         
-makeQarray(q)
+Q=makeQarray(q)
 
 statFreqmat=sp.linalg.expm(Q*longV)    
 statFreq=[]
@@ -80,12 +80,22 @@ qi=stateHist.index[i]
 j=i+1
 qj=stateHist.index[j]
 
-for i in stateHist:
-    #print i
-    #qiRow=q[stateSpace.index(i)]
-    #print qiRow
-    j=stateHist.index(i)
-    print j
+for count in range(len(stateHist)):
+    print count
+    i=stateHist[count]
+    print i
+    j=stateHist[count+1]
+    print i,j
+    print count
+    print i
+    qiRow=Q[stateSpace.index(i)]
+    print qiRow
+    #j=stateHist.index[]
+    qij=qiRow[count+1]
+    print qij
+    count+=1
+    print count
+    
     #j=qiRow[stateSpace.index(j)]
     
 
