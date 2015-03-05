@@ -103,7 +103,7 @@ class Markov(object):
         """
         marg=sp.linalg.expm(self.Q*branch_len)
         return marg
-        
+     #write script to replace ATGC with numbers 0-3   
     def calcHistProb(self,stateHist,timeHist):
         statFreq=self.stationaryFreq()
         states_totalProb=[]
@@ -112,43 +112,20 @@ class Markov(object):
             i=
            iRow=self.q[self.stateSpace.index(count)]
            qj=qiRow[self.stateSpace.index(count+1)]
-           
+        #Waiting times
+           #for s in statespace:
+               #for wt in waiting times:
+               #pull from exponential distribution with qii as gamma 
+               #Q.[s][s]
+            # last waiting time
+           #cfd 1-E^-gamma*X
+           #x is the last waiting time. 
+           #last time prob = 1-cdf 
+           #functools.reduce(operator.mul, list) or something
+         
            def calcHistProb(self, states, timevals):
 
             
           def stateProb(self):
-""" Calculates the probabilities across all waiting
-times and nucleotide states in the chain
-"""
-if len(self.chain) == 0:
-return "chain is empty"
-if len(self.tProblist) == 0:
-return "run the tProb function, the transition probability matrix is empty"
-list = []
-# multiply all of the waiting times together, except the last value
-sum = 1
-for i in self.times[:-1]:
-sum *= i
-# not sure about this. Do I need to convert these waiting times to a probability? and how?
-list.extend(self.times[:-1])
-# multiply all of the chain transition probabilities together
-# except the first value
-for a, b in zip(self.chain, self.chain[1:]):
-curr = self.stateSpace.index(b)
-prev = self.stateSpace.index(a)
-#print curr, prev
-#val = self.tProb()[prev, curr]
-val = self.tProblist[prev, curr]
-sum *= val
-list.append(val)
-# calculates the probability of the first state in the chain
-row = self.margProb(chainLength=100)[0]
-firstProb = row[self.stateSpace.index(self.chain[0])]
-sum *= firstProb
-list.append(firstProb)
-# just need to figure out the last value (1 - cdf (t last))
-y = 1.0 - (norm.cdf(self.times[-1]))
-sum *= y
-list.append(y)
 
             
