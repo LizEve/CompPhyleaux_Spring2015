@@ -149,12 +149,6 @@ class Markov(object):
             self.multChains.append(sim[2])
         return self.multChains  #returned as a list of lits. lists of paired chains and wait times 
        
-    
-            # a=Markov()
-            # s=a.simulate()
-            # 
-            # s[0]
-            # s[1]
 
     """
     would like to make the following it's own subclass. 
@@ -166,43 +160,6 @@ class Markov(object):
             self.Q=self.makeQarray()
             self.LHlist=[]
     """
-                 
-    def margProbMatrix(self):
-        """
-        marginalizes over a length of time
-        multiple substitutions over that time are assumed
-        large values passed to this will create stationary frequencies
-        """
-        marg=sp.linalg.expm(self.Q*self.chainLen)
-        return marg
-        
-    def margProb(self,start,end):
-        """
-        takes a starting value and an ending value
-        uses the branch length you gave the Markov class and returns the likelihood aka marg prob for those values
-        """
-        matrix=self.margProbMatrix()
-        LH=matrix[self.stateSpace.index(start),self.stateSpace.index(end)]
-        return LH
-    
-    def margProbMulti(self):
-        """
-        automatically uses lists of starts and end states that were stored from the multiple simulations
-        not sure if i want to change this to accept other input for the start and end lists
-        """
-        if len(self.endStates) != len(self.startStates):
-            print "something went wrong! lists are different lenghts. this should be impossible, but you managed it. congrats?"
-        else:
-            for num in range(len(self.startStates)):
-                start=self.startStates[num]
-                end=self.endStates[num]
-                LH=self.margProb(start,end)
-                self.LHlist.append(LH)
-        
-                
-            
-    
-        
     
     def calcHistProb(self,stateHist,timeHist):
         """
@@ -228,61 +185,151 @@ class Markov(object):
         totalProb.append(lastTimeP)
         LH=functools.reduce(operator.mul, totalProb, 1)
         return LH
+                 
+    def margProbMatrix(self,V):
+        """
+        marginalizes over a length of time
+        multiple substitutions over that time are assumed
+        large values passed to this will create stationary frequencies
+        """
+        marg=sp.linalg.expm(self.Q*V)
+        return marg
         
-"""       
+    def margProb(self,start,end,V):
+        """
+        takes a starting value and an ending value
+        uses the branch length you gave the Markov class and returns the likelihood aka marg prob for those values
+        """
+        matrix=self.margProbMatrix(V)
+        LH=matrix[self.stateSpace.index(start),self.stateSpace.index(end)]
+        return LH
+    
+    def LHMultSites(self):
+        """
+        automatically uses lists of starts and end states that were stored from the multiple simulations
+        not sure if i want to change this to accept other input for the start and end lists
+        """
+        if len(self.endStates) != len(self.startStates):
+            print "something went wrong! lists are different lenghts. this should be impossible, but you managed it. congrats?"
+        else:
+            for num in range(len(self.startStates)):
+                start=self.startStates[num]
+                end=self.endStates[num]
+                LH=self.margProb(start,end,self.chainLen)
+                self.LHlist.append(LH)        
 
- =================================       
-    def branchEst(self,initV,diff,cutOff,startState,endState):
+    def totalLH(self):
+        total=functools.reduce(operator.mul, self.LHlist, 1)
+        return total
+            
+    def LHBranchCalc(self,V):
+        """
+        similar to LH MultSites but this requires V input
+        output is single number
+        """
+        if len(self.endStates) != len(self.startStates):
+            print "something went wrong! lists are different lenghts. this should be impossible, but you managed it. congrats?"
+        else:
+            branchLH=1
+            for num in range(len(self.startStates)):
+                start=self.startStates[num]
+                end=self.endStates[num]
+                LH=self.margProb(start,end,V)
+                branchLH*=LH
+            return branchLH   
+        
+    """
+    a=Markov(nSims=5)
+    a.multSims()
+    a.margProbMulti()
+    print a.totaLH()
+    """
+    """
+    def branchEst(self,start,end,initV,diff=0.1,cutOff=0.001,maxBranch=20):
+        LH=totalLH()
+        if LH==0:
+            print "you need to run margProbMult() to create likelihoods for your sites"
+        else:
+            currV=initV
+            for num in range(len(self.startStates)):
+                
+     """
+        #print pc
+        #while the diff btw the p values is larger than your cutoff
+        #while diff>cut_off:
+        #   pu=pc+diff
+        #   pd=pc-diff
+        #    LHc=binom_dist(k,n,pc)
+        #    LHu=binom_dist(k,n,pu)
+        #    LHd=binom_dist(k,n,pd)
+            #print LHc,LHu,LHd
+            #print pc,pu,pd
+        #    if LHc<LHd:
+        #        pc=pd
+        #        pu+=diff
+        #        pd-=diff
+        #    elif LHc<LHu:
+        #        pc=pu
+        #        pu+=diff
+        #        pd-=diff 
+        #    elif LHc>LHu and LHc>LHd: #could also just put else
+        #        diff=diff/2
+        #return [LHc,pc] 
+                
        
-        currLH=1
-        for i in 1,2,....,nsites:
-            currLH*=LH of site i
-      
-        #initV=currV
-        #for element in startStates (if multiple sites)
-            #calc current likelihood of initV- marginalize Q over V. get qij
-        #calc LH for currV-diff
-        #calc LH for currV+diff
-        #make sure that branch lengths stay above 0
-        #while(diff>thresh):
-            #if (upLH > currLH):
-                #currV=branchEst(upV,diff,thresh)
-            #elif(downLH>currLH):
-                #currV=branchEst(downV,diff,thresh)
-            #diff *=0.5
-            #currLH = LHcalc(currV)
+       
+
+
+"""       
+     =================================                
+            currLH=1
+            for i in 1,2,....,nsites:
+                currLH*=LH of site i
+          
+            #initV=currV
+            #for element in startStates (if multiple sites)
+                #calc current likelihood of initV- marginalize Q over V. get qij
             #calc LH for currV-diff
             #calc LH for currV+diff
-        #return currV & currLH
-    
-    def ML_robot(k,n,diff=0.1,cut_off=0.001):
-    #set initial parameter value    
-    pc=random.random()
-    #print pc
-    #while the diff btw the p values is larger than your cutoff
-    while diff>cut_off:
-        pu=pc+diff
-        pd=pc-diff
-        LHc=binom_dist(k,n,pc)
-        LHu=binom_dist(k,n,pu)
-        LHd=binom_dist(k,n,pd)
-        #print LHc,LHu,LHd
-        #print pc,pu,pd
-        if LHc<LHd:
-            pc=pd
-            pu+=diff
-            pd-=diff
-        elif LHc<LHu:
-            pc=pu
-            pu+=diff
-            pd-=diff 
-        elif LHc>LHu and LHc>LHd: #could also just put else
-            diff=diff/2
-    return [LHc,pc]
-    
-    
-    #create object for note
-    #create object for tree
-    #figure out how to store
-    
+            #make sure that branch lengths stay above 0
+            #while(diff>thresh):
+                #if (upLH > currLH):
+                    #currV=branchEst(upV,diff,thresh)
+                #elif(downLH>currLH):
+                    #currV=branchEst(downV,diff,thresh)
+                #diff *=0.5
+                #currLH = LHcalc(currV)
+                #calc LH for currV-diff
+                #calc LH for currV+diff
+            #return currV & currLH
+        
+        def ML_robot(k,n,diff=0.1,cut_off=0.001):
+        #set initial parameter value    
+        pc=random.random()
+        #print pc
+        #while the diff btw the p values is larger than your cutoff
+        while diff>cut_off:
+            pu=pc+diff
+            pd=pc-diff
+            LHc=binom_dist(k,n,pc)
+            LHu=binom_dist(k,n,pu)
+            LHd=binom_dist(k,n,pd)
+            #print LHc,LHu,LHd
+            #print pc,pu,pd
+            if LHc<LHd:
+                pc=pd
+                pu+=diff
+                pd-=diff
+            elif LHc<LHu:
+                pc=pu
+                pu+=diff
+                pd-=diff 
+            elif LHc>LHu and LHc>LHd: #could also just put else
+                diff=diff/2
+        return [LHc,pc]
+        
+        
+        #create object for note
+        #create object for tree
+        #figure out how to store 
 """
