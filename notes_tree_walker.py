@@ -67,12 +67,14 @@ def stationaryFreq(Q,longV):
     statFreq=[statFreqA,statFreqC,statFreqG,statFreqT]
     return statFreq       
 
+
+
 statFreq=stationaryFreq(Q,longV)
 print statFreq
 statFreq=[]
 stateHist=['t', 'g', 'c', 't', 'c', 'a', 'c', 'a', 'c']
 timeHist=[0.30128339968394346, 0.4838314807043198, 4.0934644738405375, 2.879742835201872, 0.901128743239807, 0.2756532847403307, 0.5581161157285621, 1.091560978118395]
-print stateHist[0]
+print q.index(stateHist[0])
 print statFreq[stateSpace.index(stateHist[0])]
 print statFreq[1]
 
@@ -97,8 +99,12 @@ for count in range(len(stateHist)):
     print count
     
     #j=qiRow[stateSpace.index(j)]
-    
+count=
+Q[stateSpace.index(stateHist[count]),stateSpace.index(stateHist[(count+1)])]
 
+
+    
+Q
 def calcHistProb(self,stateHist,timeHist):
         totalProb=[]
         for i in stateHist:
