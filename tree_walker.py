@@ -19,37 +19,20 @@ class Markov(object):
     def __init__(self,q=[[-0.75,0.25,0.25,0.25],
                         [0.25,-0.75,0.25,0.25],
                         [0.25,0.25,-0.75,0.25],
-                        [0.25,0.25,0.25,-0.75]],chainLen=10,stateSpace=['a','c','g','t'],nSims=1):
+                        [0.25,0.25,0.25,-0.75]],chainLen=2,stateSpace=['a','c','g','t'],nSims=1):
         self.q=q #Q indicates a np.array. q is a list of lists
         self.chainLen=chainLen #total times
         self.stateSpace=stateSpace
         self.nSims=nSims
         self.chains=[] #a list of character history lists across simulations
         self.waitTimes=[] #a list of wait time lists across simulations
-        self.multSims=[] # paired character histories and wait times across simulations
+        self.multChains=[] # paired character histories and wait times across simulations
         self.startStates=[] # start states across simulations
         self.endStates=[] #end states across simulations
-        self.makeQarray() #automatically make a Q matrix that is a sci py array of the q matrix
+        self.Q=self.makeQarray() #automatically make a Q matrix that is a sci py array of the q matrix
+        self.LHlist=[]
 
     #def make a Q array out of r and pi values      
-      
-    def makeQarray(self):
-        Q=sp.array(self.q)
-        return Q
-        
-    def stationaryFreq(self):
-        """
-        creates stationary frequencies 
-        """
-        statFreqmat=sp.linalg.expm(Q*100) #exponentiate to a very large number to get stationary freqs
-        #theoretically put in a check here to make sure all numbers in a column are almost identicle. 
-        statFreqA=statFreqmat[0,1] #store each stationary frequency
-        statFreqC=statFreqmat[1,0]
-        statFreqG=statFreqmat[2,0]
-        statFreqT=statFreqmat[3,0]
-        statFreq=[statFreqA,statFreqC,statFreqG,statFreqT] #should round these numbers off 
-        return statFreq       
-        
         
     def discSamp(self,probs):
         """
@@ -70,7 +53,16 @@ class Markov(object):
             if ranNum < cumulProbs[i]:    #iterates elements of a list to find where ranNum fits on CDF
                return self.stateSpace[i] #state space will always be same. 
         return None     #if none of the above happens. return nothing. 
-      
+        
+    def indexStatespace(self,stateSpace):
+        """
+        creates a state space that is numbers instead of letters
+        """
+        numStates=[]
+        for state in stateSpace:
+            index=stateSpace.index(state)
+            numStates.append(index)
+        return numStates 
 
     def qii(self,qi): 
         """
@@ -80,6 +72,24 @@ class Markov(object):
         for i in qiRow:
             if i < 0:
                 return -i
+                
+    def makeQarray(self):
+        Q=sp.array(self.q)
+        return Q
+        
+    def stationaryFreq(self):
+        """
+        creates stationary frequencies 
+        """
+        statFreqmat=sp.linalg.expm(self.Q*100) #exponentiate to a very large number to get stationary freqs
+        #theoretically put in a check here to make sure all numbers in a column are almost identicle. 
+        statFreqA=statFreqmat[0,1] #store each stationary frequency
+        statFreqC=statFreqmat[1,0]
+        statFreqG=statFreqmat[2,0]
+        statFreqT=statFreqmat[3,0]
+        statFreq=[statFreqA,statFreqC,statFreqG,statFreqT] #should round these numbers off 
+        return statFreq       
+        
                 
     def simulate(self):
         """
@@ -121,7 +131,7 @@ class Markov(object):
                     if i == -1:
                         conditionalProbs[conditionalProbs.index(i)]=0
                 last_qi=self.discSamp(conditionalProbs) 
-                ch.ex_tend(last_qi)
+                ch.extend(last_qi)
                 self.endStates.append(last_qi)
                 #print ch   
         self.waitTimes.append(wT)
@@ -129,51 +139,71 @@ class Markov(object):
         pair=[ch,wT]
         return ch,wT,pair
         
-    
-            # a=Markov()
-            # s=a.simulate()
-            # 
-            # s[0]
-            # s[1]
-    
-    def multipleChains(self):
+    def multSims(self):
         #if you want to re-set every time you run multiple chains
         #self.chain=[]
         #self.waitTimes=[]
         #self.multSims=[]
         for n in range(self.nSims):
             sim=self.simulate()
-            self.multSims.append(sim[2])
-        return self.multSims  #returned as a list of lits. lists of paired chains and wait times 
-            
-        
-    def indexStatespace(self,stateSpace):
-        """
-        creates a state space that is numbers instead of letters
-        """
-        numStates=[]
-        for state in stateSpace:
-            index=stateSpace.index(state)
-            numStates.append(index)
-        return numStates
-
-
-class MrkvStats(Markov):
+            self.multChains.append(sim[2])
+        return self.multChains  #returned as a list of lits. lists of paired chains and wait times 
+       
     
-    def __init__(self):
-            super(MrkvStats, self).__init__()    
-            
+            # a=Markov()
+            # s=a.simulate()
+            # 
+            # s[0]
+            # s[1]
+
+    """
+    would like to make the following it's own subclass. 
+    need to learn more about classes before i do that. 
+    class MrkvStats(Markov):
+        
+        def __init__(self):
+            super(MrkvStats, self).__init__(self)    
+            self.Q=self.makeQarray()
+            self.LHlist=[]
+    """
                  
-    def margProbMatrix(self,branch_len):
+    def margProbMatrix(self):
         """
         marginalizes over a length of time
         multiple substitutions over that time are assumed
         large values passed to this will create stationary frequencies
         """
-        marg=sp.linalg.expm(self.Q*branch_len)
+        marg=sp.linalg.expm(self.Q*self.chainLen)
         return marg
+        
+    def margProb(self,start,end):
+        """
+        takes a starting value and an ending value
+        uses the branch length you gave the Markov class and returns the likelihood aka marg prob for those values
+        """
+        matrix=self.margProbMatrix()
+        LH=matrix[self.stateSpace.index(start),self.stateSpace.index(end)]
+        return LH
+    
+    def margProbMulti(self):
+        """
+        automatically uses lists of starts and end states that were stored from the multiple simulations
+        not sure if i want to change this to accept other input for the start and end lists
+        """
+        if len(self.endStates) != len(self.startStates):
+            print "something went wrong! lists are different lenghts. this should be impossible, but you managed it. congrats?"
+        else:
+            for num in range(len(self.startStates)):
+                start=self.startStates[num]
+                end=self.endStates[num]
+                LH=self.margProb(start,end)
+                self.LHlist.append(LH)
+        
+                
+            
     
         
+    
     def calcHistProb(self,stateHist,timeHist):
         """
         P(i)*P(j|i)*P(t)..... etc
