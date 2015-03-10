@@ -31,6 +31,7 @@ class Markov(object):
         self.endStates=[] #end states across simulations
         self.Q=self.makeQarray() #automatically make a Q matrix that is a sci py array of the q matrix
         self.LHlist=[]
+        self.multSims()
 
     #def make a Q array out of r and pi values      
         
@@ -239,45 +240,83 @@ class Markov(object):
             return branchLH   
         
     """
-    a=Markov(nSims=5)
+    a=Markov(nSims=2)
     a.multSims()
     a.margProbMulti()
     print a.totaLH()
+    a.branchEst(2)
     """
+  
+    def branchEst(self,currV,step=0.1):
+        if len(self.startStates) == 0:
+            print "you need to run self.multSims() to create chains to estimate a branch length for"
+        else:  #set up branch lens and LH scores for according       
+            diff=step            
+            while diff > 0.001: 
+                upV=currV+diff
+                downV=currV-diff
+                currLH=self.LHBranchCalc(currV)
+                upLH=self.LHBranchCalc(upV)
+                downLH=self.LHBranchCalc(downV)
+                
+                if upLH > currLH: #follow the likelihood road
+                    
+                    currV=upV #change len
+                    upV=currV+diff #add diff
+                    currLH=self.LHBranchCalc(currV) #recalculate likelihoods
+                    upLH=self.LHBranchCalc(upV)
+                    
+                elif downLH > currLH:
+                    
+                    if downV > 0:  #make sure len is greater than zero
+                        currV=downV
+                        downV=currV-diff
+                        currLH=self.LHBranchCalc(currV)
+                        downLH=self.LHBranchCalc(downV)
+                    else:
+                        currV=downV/2
+                        downV=currV/2
+                        currLH=self.LHBranchCalc(currV)
+                        downLH=self.LHBranchCalc(downV)
+                        
+                elif currLH > downLH and currLH > upLH:
+        
+                    diff*=0.5     
+                              
+        return currV 
+    
+    
+    
+    
     """
-    def branchEst(self,start,end,initV,diff=0.1,cutOff=0.001,maxBranch=20):
-        LH=totalLH()
-        if LH==0:
-            print "you need to run margProbMult() to create likelihoods for your sites"
-        else:
-            currV=initV
-            for num in range(len(self.startStates)):
+   #attempts and failures in recursion
+    def branchEst(self,currV,step=0.1):
+        if len(self.startStates) == 0:
+            print "you need to run self.multSims() to create chains to estimate a branch length for"
+        else:  #set up branch lens and LH scores for according       
+            #print currV
+            while step > 0.001: 
+                diff=step 
+                upV=currV+diff
+                downV=currV-diff
+                currLH=self.LHBranchCalc(currV)
+                upLH=self.LHBranchCalc(upV)
+                downLH=self.LHBranchCalc(downV)
+                if upLH > currLH:
+                    self.branchEst(upV)
+                elif downLH > currLH:
+                    if downV > 0:
+                        self.branchEst(downV)
+                    else:
+                        currV*=0.5
+                        self.branchEst(currV)
+                elif currLH > downLH and currLH > upLH:
+                    step=diff/2
                 
-     """
-        #print pc
-        #while the diff btw the p values is larger than your cutoff
-        #while diff>cut_off:
-        #   pu=pc+diff
-        #   pd=pc-diff
-        #    LHc=binom_dist(k,n,pc)
-        #    LHu=binom_dist(k,n,pu)
-        #    LHd=binom_dist(k,n,pd)
-            #print LHc,LHu,LHd
-            #print pc,pu,pd
-        #    if LHc<LHd:
-        #        pc=pd
-        #        pu+=diff
-        #        pd-=diff
-        #    elif LHc<LHu:
-        #        pc=pu
-        #        pu+=diff
-        #        pd-=diff 
-        #    elif LHc>LHu and LHc>LHd: #could also just put else
-        #        diff=diff/2
-        #return [LHc,pc] 
-                
-       
-       
+                    
+        return currV 
+    
+    """
 
 
 """       
